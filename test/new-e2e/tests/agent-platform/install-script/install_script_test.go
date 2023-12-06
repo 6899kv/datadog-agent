@@ -103,6 +103,15 @@ func (is *installScriptSuite) TestInstallAgent() {
 	}
 }
 
+func (is *installScriptSuite) testUninstall(client *common.TestClient, flavor string) {
+	is.T().Run("remove the agent", func(tt *testing.T) {
+		_, err := client.PkgManager.Remove(flavor)
+		require.NoError(tt, err, "should uninstall the agent")
+	})
+
+	common.CheckUninstallation(is.T(), client)
+}
+
 func (is *installScriptSuite) AgentTest(flavor string) {
 	host := is.Env().RemoteHost
 	fileManager := filemanager.NewUnixFileManager(host)
@@ -115,6 +124,7 @@ func (is *installScriptSuite) AgentTest(flavor string) {
 	install.Unix(is.T(), client, installparams.WithArch(*architecture), installparams.WithFlavor(flavor), installparams.WithMajorVersion(*majorVersion))
 
 	common.CheckInstallation(is.T(), client)
+	common.CheckSigningKeys(is.T(), client)
 	common.CheckAgentBehaviour(is.T(), client)
 	common.CheckAgentStops(is.T(), client)
 	common.CheckAgentRestarts(is.T(), client)
@@ -129,7 +139,7 @@ func (is *installScriptSuite) AgentTest(flavor string) {
 		common.CheckCWSBehaviour(is.T(), client)
 	}
 	common.CheckInstallationInstallScript(is.T(), client)
-	common.CheckUninstallation(is.T(), client, flavor)
+	is.testUninstall(client, flavor)
 }
 
 func (is *installScriptSuite) IotAgentTest() {
@@ -144,12 +154,13 @@ func (is *installScriptSuite) IotAgentTest() {
 	install.Unix(is.T(), client, installparams.WithArch(*architecture), installparams.WithFlavor(*flavor))
 
 	common.CheckInstallation(is.T(), client)
+	common.CheckSigningKeys(is.T(), client)
 	common.CheckAgentBehaviour(is.T(), client)
 	common.CheckAgentStops(is.T(), client)
 	common.CheckAgentRestarts(is.T(), client)
 
 	common.CheckInstallationInstallScript(is.T(), client)
-	common.CheckUninstallation(is.T(), client, "datadog-iot-agent")
+	is.testUninstall(client, "datadog-iot-agent")
 }
 
 func (is *installScriptSuite) DogstatsdAgentTest() {
@@ -164,9 +175,10 @@ func (is *installScriptSuite) DogstatsdAgentTest() {
 	install.Unix(is.T(), client, installparams.WithArch(*architecture), installparams.WithFlavor(*flavor))
 
 	common.CheckInstallation(is.T(), client)
+	common.CheckSigningKeys(is.T(), client)
 	common.CheckDogstatdAgentBehaviour(is.T(), client)
 	common.CheckDogstatsdAgentStops(is.T(), client)
 	common.CheckDogstatsdAgentRestarts(is.T(), client)
 	common.CheckInstallationInstallScript(is.T(), client)
-	common.CheckUninstallation(is.T(), client, "datadog-dogstatsd")
+	is.testUninstall(client, "datadog-dogstatsd")
 }
