@@ -822,6 +822,8 @@ func StartCWSPtracer(args []string, envs []string, probeAddr string, creds Creds
 		logDebugf("connection to system-probe...")
 		if async {
 			go func() {
+				// use a local err variable to avoid race condition
+				var err error
 				client, err = initConn(probeAddr, 600)
 				if err != nil {
 					return
