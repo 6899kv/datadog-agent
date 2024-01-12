@@ -157,6 +157,7 @@ runtime_security_config:
     dir: {{ .SecurityProfileDir }}
     watch_dir: {{ .SecurityProfileWatchDir }}
     anomaly_detection:
+      enabled: true
       default_minimum_stable_period: {{.AnomalyDetectionDefaultMinimumStablePeriod}}
       minimum_stable_period:
         exec: {{.AnomalyDetectionMinimumStablePeriodExec}}

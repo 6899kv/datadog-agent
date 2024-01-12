@@ -584,6 +584,7 @@ func TestSecurityProfileReinsertionPeriod(t *testing.T) {
 		securityProfileWatchDir:                 true,
 		anomalyDetectionMinimumStablePeriodExec: 10 * time.Second,
 		anomalyDetectionMinimumStablePeriodDNS:  10 * time.Second,
+		anomalyDetectionWarmupPeriod:            10 * time.Second,
 	}))
 	if err != nil {
 		t.Fatal(err)
@@ -679,10 +680,10 @@ func TestSecurityProfileReinsertionPeriod(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		time.Sleep(6 * time.Second) // a quick sleep to let the profile to be loaded (5sec debounce + 1sec spare)
+		time.Sleep(6 * time.Second)  // a quick sleep to let the profile to be loaded (5sec debounce + 1sec spare)
+		time.Sleep(time.Second * 10) // waiting for the stable period
 
 		err = test.GetCustomEventSent(t, func() error {
-			time.Sleep(time.Second * 10) // waiting for the stable period
 			cmd := dockerInstance.Command("getconf", []string{"-a"}, []string{})
 			_, err = cmd.CombinedOutput()
 			return err
@@ -718,10 +719,10 @@ func TestSecurityProfileReinsertionPeriod(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		time.Sleep(6 * time.Second) // a quick sleep to let the profile to be loaded (5sec debounce + 1sec spare)
+		time.Sleep(6 * time.Second)  // a quick sleep to let the profile to be loaded (5sec debounce + 1sec spare)
+		time.Sleep(time.Second * 10) // waiting for the stable period
 
 		err = test.GetCustomEventSent(t, func() error {
-			time.Sleep(time.Second * 10) // waiting for the stable period
 			cmd := dockerInstance.Command("nslookup", []string{"google.fr"}, []string{})
 			_, err = cmd.CombinedOutput()
 			return err
