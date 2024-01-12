@@ -14,7 +14,7 @@ import (
 // ([0-9a-fA-F]{64}) is standard container id used pretty much everywhere
 // ([0-9a-fA-F]{32}-[0-9]{10}) is container id used by AWS ECS
 // ([0-9a-fA-F]{8}(-[0-9a-fA-F]{4}){4}) is container id used by Garden
-var ContainerIDPatternStr = "([0-9a-fA-F]{64})|([0-9a-fA-F]{32}-[0-9]{10})|([0-9a-fA-F]{8}(-[0-9a-fA-F]{4}){4})"
+var ContainerIDPatternStr = "^([0-9a-fA-F]{64})|([0-9a-fA-F]{32}-[0-9]{10})|([0-9a-fA-F]{8}(-[0-9a-fA-F]{4}){4})$"
 
 // containerIDPattern is the pattern of a container ID
 var containerIDPattern = regexp.MustCompile(ContainerIDPatternStr)
