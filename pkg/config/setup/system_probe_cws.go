@@ -6,12 +6,8 @@
 package setup
 
 import (
+	ptracerconstants "github.com/DataDog/datadog-agent/cmd/cws-instrumentation/subcommands/tracecmd/constants"
 	pkgconfigmodel "github.com/DataDog/datadog-agent/pkg/config/model"
-)
-
-const (
-	// DefaultEBPFLessProbeAddr defines the default ebpfless probe address
-	DefaultEBPFLessProbeAddr = "localhost:5678"
 )
 
 func initCWSSystemProbeConfig(cfg pkgconfigmodel.Config) {
@@ -110,5 +106,5 @@ func initCWSSystemProbeConfig(cfg pkgconfigmodel.Config) {
 
 	// CWS -eBPF Less
 	cfg.BindEnvAndSetDefault("runtime_security_config.ebpfless.enabled", false)
-	cfg.BindEnvAndSetDefault("runtime_security_config.ebpfless.socket", DefaultEBPFLessProbeAddr)
+	cfg.BindEnvAndSetDefault("runtime_security_config.ebpfless.socket", ptracerconstants.DefaultEBPFLessProbeAddr)
 }
