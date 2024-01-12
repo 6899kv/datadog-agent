@@ -13,6 +13,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/cilium/ebpf"
 	"github.com/cilium/ebpf/btf"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -41,7 +42,13 @@ func TestConntrackers(t *testing.T) {
 	})
 	t.Run("eBPF", func(t *testing.T) {
 		modes := []ebpftest.BuildMode{ebpftest.Prebuilt, ebpftest.RuntimeCompiled}
-		if _, err := btf.LoadKernelSpec(); err == nil {
+		// TODO remove checks when BTFHub has kernel modules
+		mod, _ := ebpf.KernelModule("__nf_conntrack_hash_insert")
+		if mod != "" {
+			if _, err := btf.LoadKernelModuleSpec(mod); err == nil {
+				modes = append(modes, ebpftest.CORE)
+			}
+		} else {
 			modes = append(modes, ebpftest.CORE)
 		}
 		ebpftest.TestBuildModes(t, modes, "", func(t *testing.T) {
