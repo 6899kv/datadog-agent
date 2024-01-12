@@ -1136,7 +1136,9 @@ func StartCWSPtracer(args []string, envs []string, probeAddr string, creds Creds
 			case CloneNr:
 				if flags := tracer.ReadArgUint64(regs, 0); flags&uint64(unix.SIGCHLD) == 0 {
 					pc.SetAsThreadOf(process, ppid)
+					fmt.Printf("THREAD: %d %d\n", pid, ppid)
 				} else if parent := pc.Get(ppid); parent != nil {
+					fmt.Printf("CLONE: %d %d\n", pid, ppid)
 					sendSyscallMsg(&ebpfless.SyscallMsg{
 						Type: ebpfless.SyscallTypeFork,
 						Fork: &ebpfless.ForkSyscallMsg{
@@ -1151,7 +1153,9 @@ func StartCWSPtracer(args []string, envs []string, probeAddr string, creds Creds
 				}
 				if flags := binary.NativeEndian.Uint64(data); flags&uint64(unix.SIGCHLD) == 0 {
 					pc.SetAsThreadOf(process, ppid)
+					fmt.Printf("THREAD 3: %d %d\n", pid, ppid)
 				} else if parent := pc.Get(ppid); parent != nil {
+					fmt.Printf("CLONE 3: %d %d\n", pid, ppid)
 					sendSyscallMsg(&ebpfless.SyscallMsg{
 						Type: ebpfless.SyscallTypeFork,
 						Fork: &ebpfless.ForkSyscallMsg{
@@ -1160,6 +1164,7 @@ func StartCWSPtracer(args []string, envs []string, probeAddr string, creds Creds
 					})
 				}
 			case ForkNr, VforkNr:
+				fmt.Printf("FORK: %d %d\n", pid, ppid)
 				if parent := pc.Get(ppid); parent != nil {
 					sendSyscallMsg(&ebpfless.SyscallMsg{
 						Type: ebpfless.SyscallTypeFork,
