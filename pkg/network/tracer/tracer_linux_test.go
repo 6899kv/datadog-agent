@@ -28,6 +28,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/cilium/ebpf"
 	"github.com/cilium/ebpf/btf"
 	"github.com/cilium/ebpf/rlimit"
 	"github.com/golang/mock/gomock"
@@ -2030,7 +2031,12 @@ func TestEbpfConntrackerFallback(t *testing.T) {
 	require.NoError(t, err)
 
 	coreValues := []bool{false}
-	if _, err := btf.LoadKernelSpec(); err == nil {
+	mod, _ := ebpf.KernelModule("__nf_conntrack_hash_insert")
+	if mod != "" {
+		if _, err := btf.LoadKernelModuleSpec(mod); err == nil {
+			coreValues = append(coreValues, true)
+		}
+	} else {
 		coreValues = append(coreValues, true)
 	}
 
