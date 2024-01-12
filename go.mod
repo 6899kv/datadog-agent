@@ -96,7 +96,7 @@ require (
 	github.com/DataDog/datadog-go/v5 v5.4.0
 	// do not update datadog-operator to 1.2.1 because the indirect dependency github.com/DataDog/datadog-api-client-go/v2 v2.15.0 is trigger a huge Go heap memory increase.
 	github.com/DataDog/datadog-operator v1.1.0
-	github.com/DataDog/ebpf-manager v0.4.1-0.20240108202814-53882536a09f
+	github.com/DataDog/ebpf-manager v0.4.1-0.20240112201231-e95ec50bde04
 	github.com/DataDog/gopsutil v1.2.2
 	github.com/DataDog/nikos v1.12.1
 	github.com/DataDog/opentelemetry-mapping-go/pkg/otlp/attributes v0.11.0
@@ -249,7 +249,7 @@ require (
 	golang.org/x/exp v0.0.0-20231214170342-aacd6d4b4611
 	golang.org/x/net v0.19.0
 	golang.org/x/sync v0.5.0
-	golang.org/x/sys v0.15.0
+	golang.org/x/sys v0.16.0
 	golang.org/x/text v0.14.0
 	golang.org/x/time v0.3.0
 	golang.org/x/tools v0.16.1
@@ -765,3 +765,5 @@ exclude (
 
 // Temporarily use a fork of gosnmp for multiple-user traps support
 replace github.com/gosnmp/gosnmp => github.com/zoedt/gosnmp v0.0.0-20231218153121-83a06ce65d5a
+
+replace github.com/cilium/ebpf => github.com/brycekahle/ebpf v0.0.0-20240112201138-d01b1d58e2b5
