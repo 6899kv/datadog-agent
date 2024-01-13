@@ -141,15 +141,11 @@ upload_dependencies_arm64:
     - cp $CI_PROJECT_DIR/test/new-e2e/system-probe/test-runner/files/*.json $DEPENDENCIES/
     # package all the dependencies
     - ls -la $DEPENDENCIES
-    - pushd $DD_AGENT_TESTING_DIR/$ARCH
-    - tar czvf ../$ARCHIVE_NAME dependencies
-    - popd
+    - tar czvf ../$ARCHIVE_NAME dependencies -C $DD_AGENT_TESTING_DIR/$ARCH
     # copy system probe tests
     - mkdir -p $SYSTEM_PROBE_TESTS
     - cp -R $KITCHEN_TESTS $SYSTEM_PROBE_TESTS
-    - pushd $DD_AGENT_TESTING_DIR/$ARCH
-    - tar czvf ../$TEST_ARCHIVE_NAME system-probe-tests
-    - popd
+    - tar czvf ../$TEST_ARCHIVE_NAME system-probe-tests -C $DD_AGENT_TESTING_DIR/$ARCH
     # upload tests
     - !reference [.wait_for_instances]
     - !reference [.get_instance_ip_by_type]
